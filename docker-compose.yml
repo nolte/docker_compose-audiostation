@@ -15,7 +15,7 @@ services:
       - ./mopidy-master.conf:/var/lib/mopidy/.config/mopidy/mopidy.conf:ro
     network_mode: "host"
 
-  upmodcli:
+  upmpdcli:
     image: nolte/upmpdcli
     command: "-h ingo -p 6600 -f mopidy"
     ports:
