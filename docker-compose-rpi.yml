@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+  mopidy:
+    image: nolte/rpi-mopidy
+    expose:
+      - 6600
+      - 6680
+    ports:
+      - "6600:6600"
+      - "6680:6680"
+    devices:
+     - "/dev/snd/:/dev/snd/"
+    volumes:
+      - ./mopidy-master.conf:/var/lib/mopidy/.config/mopidy/mopidy.conf:ro
+    network_mode: "host"
+
+  upmodcli:
+    image: nolte/rpi-upmpdcli
+    command: "-h ingo -p 6600 -f mopidy"
+    ports:
+      - "1900/udp:1900/udp"
+      - "1900:1900"
+    network_mode: "host"
