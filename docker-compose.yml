@@ -1,19 +1,44 @@
 version: '3'
 services:
+  data:
+    build:
+      context: .
+    volumes:
+      - ./mopidy-master.conf:/var/lib/mopidy/.config/mopidy/mopidy.conf:ro
+      - soundshare:/tmp/sharesound      
 
   mopidy:
-    image: nolte/mopidy
+    image: nolte/mopidy:development
     expose:
       - 6600
       - 6680
     ports:
       - "6600:6600"
       - "6680:6680"
-    devices:
-     - "/dev/snd/:/dev/snd/"
+    environment:
+      - GST_DEBUG=3
+    depends_on:
+      - snapserver
     volumes:
       - ./mopidy-master.conf:/var/lib/mopidy/.config/mopidy/mopidy.conf:ro
+      - soundshare:/tmp/sharesound
     network_mode: "host"
+
+  snapserver:
+    image: nolte/snapcast-server:development
+    #user: mopidy
+    volumes:
+      # Just specify a path and let the Engine create a volume
+      - soundshare:/tmp/sharesound
+    command: "-s pipe:///tmp/sharesound/snapfifo?name=Radio"
+
+  snapclient:
+    image: nolte/snapcast-client
+    links:
+     - snapserver:snapserverhost
+    devices:
+     - "/dev/snd/:/dev/snd/"
+    command: "-h snapserverhost"
 
   upmpdcli:
     image: nolte/upmpdcli
@@ -22,3 +47,7 @@ services:
       - "1900/udp:1900/udp"
       - "1900:1900"
     network_mode: "host"
+
+
+volumes:
+  soundshare:
