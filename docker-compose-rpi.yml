@@ -13,12 +13,15 @@ services:
     expose:
       - 6600
       - 6680
+    depends_on:
+      - snapserver      
     ports:
       - "6600:6600"
       - "6680:6680"
     devices:
      - "/dev/snd/:/dev/snd/"
     volumes:
+      - soundshare:/tmp/sharesound
       - ./mopidy-master.conf:/var/lib/mopidy/.config/mopidy/mopidy.conf:ro
     network_mode: "host"
 
@@ -43,6 +46,8 @@ services:
   upmpdcli:
     image: nolte/rpi-upmpdcli:development
     command: "-h localhost -p 6600 -f mopidy"
+    depends_on:
+      - mopidy
     ports:
       - "1900/udp:1900/udp"
       - "1900:1900"
