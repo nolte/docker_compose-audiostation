@@ -1,8 +1,15 @@
 version: '3'
 services:
 
+  data:
+    build:
+      context: .
+      dockerfile: DockerfileRPI
+    volumes:
+      - soundshare:/tmp/sharesound
+
   mopidy:
-    image: nolte/rpi-mopidy
+    image: nolte/rpi-mopidy:development
     expose:
       - 6600
       - 6680
@@ -15,9 +22,27 @@ services:
       - ./mopidy-master.conf:/var/lib/mopidy/.config/mopidy/mopidy.conf:ro
     network_mode: "host"
 
+snapserver:
+  image: nolte/rpi-snapcast-server:development
+  volumes:
+    - soundshare:/tmp/sharesound
+  command: "-s pipe:///tmp/sharesound/snapfifo?name=Radio"
+
+snapclient:
+  image: nolte/rpi-snapcast-client:development
+  volumes:
+    - ./alsa_sound-config/asound-hifibarry.conf:/etc/asound.conf
+  links:
+   - snapserver:snapserverhost
+  depends_on:
+    - snapserver
+  devices:
+   - "/dev/snd/:/dev/snd/"
+  command: "-h snapserverhost"
+
   upmpdcli:
-    image: nolte/rpi-upmpdcli
-    command: "-h ingo -p 6600 -f mopidy"
+    image: nolte/rpi-upmpdcli:development
+    command: "-h localhost -p 6600 -f mopidy"
     ports:
       - "1900/udp:1900/udp"
       - "1900:1900"
