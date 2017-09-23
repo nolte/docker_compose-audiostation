@@ -22,23 +22,23 @@ services:
       - ./mopidy-master.conf:/var/lib/mopidy/.config/mopidy/mopidy.conf:ro
     network_mode: "host"
 
-snapserver:
-  image: nolte/rpi-snapcast-server:development
-  volumes:
-    - soundshare:/tmp/sharesound
-  command: "-s pipe:///tmp/sharesound/snapfifo?name=Radio"
+  snapserver:
+    image: nolte/rpi-snapcast-server:development
+    volumes:
+      - soundshare:/tmp/sharesound
+    command: "-s pipe:///tmp/sharesound/snapfifo?name=Radio"
 
-snapclient:
-  image: nolte/rpi-snapcast-client:development
-  volumes:
-    - ./alsa_sound-config/asound-hifibarry.conf:/etc/asound.conf
-  links:
-   - snapserver:snapserverhost
-  depends_on:
-    - snapserver
-  devices:
-   - "/dev/snd/:/dev/snd/"
-  command: "-h snapserverhost"
+  snapclient:
+    image: nolte/rpi-snapcast-client:development
+    volumes:
+      - ./alsa_sound-config/asound-hifibarry.conf:/etc/asound.conf
+    links:
+     - snapserver:snapserverhost
+    depends_on:
+      - snapserver
+    devices:
+     - "/dev/snd/:/dev/snd/"
+    command: "-h snapserverhost"
 
   upmpdcli:
     image: nolte/rpi-upmpdcli:development
