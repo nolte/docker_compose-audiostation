@@ -1,6 +1,17 @@
 version: '3'
 services:
 
+  playliststore:
+    image: nolte/rpi-mongodb
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+    volumes:
+      - playlistdata:/data/db
+    command: "mongod --smallfiles"
+    network_mode: "host"
+
   data:
     build:
       context: .
@@ -9,12 +20,14 @@ services:
       - soundshare:/tmp/sharesound
 
   mopidy:
-    image: nolte/rpi-mopidy:development
+    build:
+      context: .
+      dockerfile: DockerfileMopidy
     expose:
       - 6600
       - 6680
     depends_on:
-      - snapserver      
+      - snapserver
     ports:
       - "6600:6600"
       - "6680:6680"
@@ -55,3 +68,4 @@ services:
 
 volumes:
   soundshare:
+  playlistdata:
