@@ -4,6 +4,7 @@ Network Audio Player with  [Mopidy](https://www.mopidy.com/),[SnapCast](https://
 
 Use [tkem/mopidy-dleyna](https://github.com/tkem/mopidy-dleyna) to load the Music from external Devices with [DLNA support](https://01.org/dleyna).  
 Use [UPnP](https://wikipedia.org/wiki/Universal_Plug_and_Play) for receiving the Music from Mobile Devices ([BubbleUPnP](https://play.google.com/store/apps/details?id=com.bubblesoft.android.bubbleupnp)) or other clients.
+Use a custome [Mopidy plugin](https://github.com/nolte/mopidy-mongodb-playlist) to got a central Store for created Playlists. Saved in a MongoDB instanze.
 
 I am using a [HiFiBerry Digi+](https://www.hifiberry.com/products/digiplus/) as additional sound card for my RPI2. The RPI are connected with [TOSLink](https://en.wikipedia.org/wiki/TOSLINK) to my Denon Audio Revceiver
 
@@ -55,9 +56,11 @@ On Docker the fifo file will be create by a data container, all three containers
 - https://hub.docker.com/r/nolte/snapcast-client/
 - https://hub.docker.com/r/nolte/mopidy/
 - https://hub.docker.com/r/nolte/upmpdcli/
+- https://hub.docker.com/_/mongo/
 
 **armhf**
 - https://hub.docker.com/r/nolte/rpi-snapcast-server/
 - https://hub.docker.com/r/nolte/rpi-snapcast-client/
 - https://hub.docker.com/r/nolte/rpi-mopidy/
 - https://hub.docker.com/r/nolte/rpi-upmpdcli/
+- https://hub.docker.com/r/nolte/rpi-mongo/
