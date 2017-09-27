@@ -9,12 +9,12 @@ services:
       - soundshare:/tmp/sharesound
 
   mopidy:
-    image: nolte/rpi-mopidy:development
+    image: nolte/rpi-mopidy:v0.9-2.1.0-1
     expose:
       - 6600
       - 6680
     depends_on:
-      - snapserver      
+      - snapserver
     ports:
       - "6600:6600"
       - "6680:6680"
@@ -26,13 +26,13 @@ services:
     network_mode: "host"
 
   snapserver:
-    image: nolte/rpi-snapcast-server:development
+    image: nolte/rpi-snapcast-server:v0.9-0.11.1
     volumes:
       - soundshare:/tmp/sharesound
     command: "-s pipe:///tmp/sharesound/snapfifo?name=Radio"
 
   snapclient:
-    image: nolte/rpi-snapcast-client:development
+    image: nolte/rpi-snapcast-client:v0.9-0.11.1
     volumes:
       - ./alsa_sound-config/asound-hifibarry.conf:/etc/asound.conf
     links:
@@ -44,7 +44,7 @@ services:
     command: "-h snapserverhost"
 
   upmpdcli:
-    image: nolte/rpi-upmpdcli:development
+    image: nolte/rpi-upmpdcli:v0.9
     command: "-h localhost -p 6600 -f mopidy"
     depends_on:
       - mopidy
