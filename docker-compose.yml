@@ -43,7 +43,7 @@ services:
     command: "-h snapserverhost"
 
   upmpdcli:
-    image: nolte/upmpdcli:development:v0.9
+    image: nolte/upmpdcli:v0.9
     depends_on:
       - mopidy
     command: "-h localhost -p 6600 -f mopidy"
