@@ -2,7 +2,7 @@ version: '3'
 services:
 
   playliststore:
-    image: nolte/rpi-mongodb
+    image: nolte/rpi-mongo
     expose:
       - 27017
     ports:
@@ -22,7 +22,7 @@ services:
   mopidy:
     build:
       context: .
-      dockerfile: DockerfileMopidy
+      dockerfile: DockerfileMopidyRPI
     expose:
       - 6600
       - 6680
@@ -40,12 +40,15 @@ services:
 
   snapserver:
     image: nolte/rpi-snapcast-server:development
+    ports:
+      - "1704:1704"
+      - "1705:1705"
     volumes:
       - soundshare:/tmp/sharesound
     command: "-s pipe:///tmp/sharesound/snapfifo?name=Radio"
 
   snapclient:
-    image: nolte/rpi-snapcast-client:development
+    image: nolte/rpi-snapcast-client:v0.9-0.11.1
     volumes:
       - ./alsa_sound-config/asound-hifibarry.conf:/etc/asound.conf
     links:
@@ -57,7 +60,7 @@ services:
     command: "-h snapserverhost"
 
   upmpdcli:
-    image: nolte/rpi-upmpdcli:development
+    image: nolte/rpi-upmpdcli:v0.9
     command: "-h localhost -p 6600 -f mopidy"
     depends_on:
       - mopidy

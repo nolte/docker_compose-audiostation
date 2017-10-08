@@ -1,4 +1,4 @@
-FROM nolte/rpi-mopidy:development
+FROM nolte/rpi-mopidy:v0.9-2.1.0-1
 
 USER root
 RUN pip install https://codeload.github.com/nolte/mopidy-mongodb-playlist/zip/dev
